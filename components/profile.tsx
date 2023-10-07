@@ -33,26 +33,17 @@ export default function UserProfile() {
     const [isShopModalOpen, setIsShopModalOpen] = useState(false);
     const [selectedMonster, setSelectedMonster] = useState<boolean>(false);
     const [monsterTokenId, setMonsterTokenId] = useState<string>();
-
+    console.log(ownedMonsters)
     return (
         <div className={styles.container}>
             {address && (
                 <>
                     <h1>GachaStar Profile</h1>
                     {/* <h3>Welcome back <span>{truncateAddress(address!)}</span></h3> */}
-                    <div className={styles.tokenBalance}>
-                        {!isTokenBalanceLoading && (
-                            <p>Token Balance: {tokenBalance?.displayValue}</p>
-                        )}
-                        <button
-                            className={styles.shopButton}
-                            onClick={() => setIsShopModalOpen(true)}
-                        >Shop Monsters</button>
-                    </div>
                     <div className={styles.monsterGrid}>
                         {!isOwnedMonstersLoading && (
                             ownedMonsters && ownedMonsters.length > 0 ? (
-                                ownedMonsters.map((monster: any, index: number) => (
+                                nfts && nfts.slice(3,4).map((monster: any, index: number) => (
                                     <div 
                                         key={index}
                                         className={styles.monsterCard}
@@ -68,11 +59,44 @@ export default function UserProfile() {
                                     </div>
                                 ))
                             ) : (
-                                <p>No Monsters</p>
+                                <p>No Profile NFT</p>
                             )
                         )}
                     </div>
-                    <h3>Your inventory:</h3>
+                    <div className={styles.tokenBalance}>
+                        <button
+                            className={styles.shopButton}
+                            onClick={() => setIsShopModalOpen(true)}
+                        >Collect Gacha Bonus</button>
+                    </div>
+                    <h3>Your inventory: 
+                    {!isOwnedMonstersLoading && (
+                            ownedMonsters && ownedMonsters.length-1)}
+                    
+                    </h3>
+                    <div className={styles.monsterGrid}>
+                        {!isOwnedMonstersLoading && (
+                            ownedMonsters && ownedMonsters.length > 0 ? (
+                                ownedMonsters.slice(0,ownedMonsters.length-1).map((monster: any, index: number) => (
+                                    <div 
+                                        key={index}
+                                        className={styles.monsterCard}
+                                    >
+                                        <ThirdwebNftMedia
+                                            metadata={monster.metadata}
+                                            style={{
+                                                overflow: "hidden",
+                                                borderRadius: "6px",
+                                            }}
+                                        />
+                                        <p>{monster.metadata.name}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>No Gachas</p>
+                            )
+                        )}
+                    </div>
 
                     {isShopModalOpen && (
                         <div 
@@ -84,12 +108,12 @@ export default function UserProfile() {
                                     onClick={() => setIsShopModalOpen(false)}
                                 >X</button>
                                 <div>
-                                    <h1>Shop Monsters</h1>
-                                    <h3>Select monster to buy:</h3>
+                                    <h1>Claim opened Gacha</h1>
+                                    <h3>Select Gacha to claim:</h3>
                                 </div>
                                 <div className={styles.monsterGrid}>
                                     {!isNFTsLoading && (
-                                        nfts && nfts.slice(1).map((monster: any, index: number) => (
+                                        nfts && nfts.slice(0,3).map((monster: any, index: number) => (
                                             <div 
                                                 key={index}
                                                 className={styles.monsterCard}
@@ -127,7 +151,7 @@ export default function UserProfile() {
                                             setMonsterTokenId(undefined);
                                             setIsShopModalOpen(false);
                                         }}
-                                    >Claim Monster</Web3Button>
+                                    >Claim Gacha Bonus</Web3Button>
                                 </div>
                             </div>
                         </div>
